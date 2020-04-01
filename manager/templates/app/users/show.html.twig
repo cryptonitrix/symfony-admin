@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Users'|trans }}{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb border-0 m-0">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'Dashboard'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('users') }}">{{ 'Users'|trans }}</a></li>
+        <li class="breadcrumb-item active">{{ user.name.full }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    <div class="controls">
+        {% if user.id.value != app.user.id %}
+            <a href="{{ path('users.edit', {'id': user.id}) }}" class="btn btn-primary btn-sm">{{ 'Edit'|trans }}</a>
+            <a href="{{ path('users.role', {'id': user.id}) }}" class="btn btn-primary btn-sm">{{ 'Change Role'|trans }}</a>
+        {% endif %}
+        {% if user.wait %}
+            <form action="{{ path('users.confirm', {'id': user.id}) }}" method="post" onsubmit="return confirm('Are you sure?')">
+                <input type="hidden" name="token" value="{{ csrf_token('confirm') }}" />
+                <button type="submit" class="btn btn-success btn-sm">{{ 'Confirm'|trans }}</button>
+            </form>
+        {% endif %}
+        {% if user.active and user.id.value != app.user.id %}
+            <form action="{{ path('users.block', {'id': user.id}) }}" method="post" onsubmit="return confirm('Are you sure?')">
+                <input type="hidden" name="token" value="{{ csrf_token('block') }}" />
+                <button type="submit" class="btn btn-danger btn-sm">{{ 'Block'|trans }}</button>
+            </form>
+        {% endif %}
+        {% if user.blocked %}
+            <form action="{{ path('users.activate', {'id': user.id}) }}" method="post" onsubmit="return confirm('Are you sure?')">
+                <input type="hidden" name="token" value="{{ csrf_token('activate') }}" />
+                <button type="submit" class="btn btn-success btn-sm">{{ 'Activate'|trans }}</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="box">
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <th>{{ 'Name'|trans }}</th>
+                <td>{{ user.name.full }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Email'|trans }}</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'ID'|trans }}</th>
+                <td>{{ user.id.value }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Created'|trans }}</th>
+                <td>{{ user.date|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Role'|trans }}</th>
+                <td>{{ user_role(user.role.name) }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Status'|trans }}</th>
+                <td>{{ user_status(user.status) }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

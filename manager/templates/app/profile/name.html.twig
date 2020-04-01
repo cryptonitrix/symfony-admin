@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Profile'|trans }}{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb border-0 m-0">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'Dashboard'|trans }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ path('profile') }}">{{ 'Profile'|trans }}</a></li>
+        <li class="breadcrumb-item active">{{ 'Name'|trans }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-success">{{ 'Set name'|trans }}</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}

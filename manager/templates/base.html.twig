@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{% block title %}{{ 'Welcome'|trans }}{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body class="c-app">
+<div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+    <div class="c-sidebar-brand d-lg-down-none">
+        <img class="c-sidebar-brand-full" src="{{ asset('build/img/brand/logo.png') }}" width="90" height="25" alt="Logo">
+        <img class="c-sidebar-brand-minimized" src="{{ asset('build/img/brand/logo.png') }}" width="90" height="25" alt="Logo">
+    </div>
+    <ul class="c-sidebar-nav">
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ path('home') }}">
+                <i class="c-sidebar-nav-icon fas fa-tachometer-alt"></i>
+                {{ 'Dashboard'|trans }}
+            </a>
+        </li>
+        <li class="c-sidebar-nav-item">
+            <a class="c-sidebar-nav-link" href="{{ path('profile') }}">
+                <i class="c-sidebar-nav-icon fas fa-user-circle"></i>
+                {{ 'Profile'|trans }}
+            </a>
+        </li>
+        {% if is_granted('ROLE_MANAGE_USERS') %}
+            <li class="c-sidebar-nav-item">
+                <a class="c-sidebar-nav-link" href="{{ path('users') }}">
+                    <i class="c-sidebar-nav-icon fas fa-users"></i>
+                    {{ 'Users'|trans }}
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+    <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
+</div>
+<div class="c-wrapper c-fixed-components">
+    <header class="c-header c-header-light c-header-fixed c-header-with-subheader">
+        <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
+            <i class="c-icon c-icon-lg fas fa-bars"></i>
+        </button>
+        <button class="c-header-toggler c-class-toggler mfs-3 d-md-down-none" type="button" data-target="#sidebar" data-class="c-sidebar-lg-show" responsive="true">
+            <i class="c-icon c-icon-lg fas fa-bars"></i>
+        </button>
+        <ul class="c-header-nav d-md-down-none">
+            <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ path('home') }}">{{ 'Dashboars'|trans }}</a></li>
+            <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ path('users') }}">{{ 'Users'|trans }}</a></li>
+            <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="{{ path('profile') }}">{{ 'Profile'|trans }}</a></li>
+        </ul>
+        <ul class="c-header-nav ml-auto mr-4">
+            <li class="c-header-nav-item dropdown"><a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <div class="c-avatar"><img class="c-avatar-img" src="{{ asset('build/img/avatars/user.svg') }}" alt=""></div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right pt-0">
+                    <div class="dropdown-header bg-light py-2"><strong>{{ app.user.username }}</strong></div>
+                    <a class="dropdown-item" href="{{ path('profile') }}">
+                        <i class="c-icon mr-2 fas fa-user-circle"></i> {{ 'Profile'|trans }}</a>
+                    <a class="dropdown-item" href="{{ path('app_logout') }}">
+                        <i class="c-icon mr-2 fas fa-sign-out-alt"></i>
+                        {{ 'Logout'|trans }}</a>
+                </div>
+            </li>
+        </ul>
+        <div class="c-subheader px-3">
+            {% block breadcrumbs %}{% endblock %}
+        </div>
+    </header>
+    <div class="c-body">
+        <main class="c-main">
+            <div class="container-fluid">
+                {% include '_flashes.html.twig' %}
+                {% block body %}{% endblock %}
+            </div>
+        </main>
+        <footer class="c-footer">
+            <div><span>© {{ "now"|date("Y") }} {{ 'All rights reserved'|trans }}</span></div>
+        </footer>
+    </div>
+</div>
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
+</html>

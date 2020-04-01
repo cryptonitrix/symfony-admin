@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'Profile'|trans }}{% endblock %}
+
+{% block breadcrumbs %}
+    <ol class="breadcrumb border-0 m-0">
+        <li class="breadcrumb-item"><a href="{{ path('home') }}">{{ 'Dashboard'|trans }}</a></li>
+        <li class="breadcrumb-item active">{{ 'Profile'|trans }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    <div class="card">
+        <div class="card-header">{{ 'Profile'|trans }}</div>
+        <div class="card-body">
+            <table class="table table-responsive-sm table-bordered">
+                <tbody>
+                <tr>
+                    <th>{{ 'ID'|trans }}</th>
+                    <td>{{ user.id }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'Name'|trans }}</th>
+                    <td>
+                        {{ user.name.first }} {{ user.name.first }}
+                        <a href="{{ path('profile.name') }}" class="btn btn-sm btn-ghost-primary">
+                            <span class="cil-pencil"></span>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th>{{ 'Created'|trans }}</th>
+                    <td>{{ user.date|date('Y-m-d H:i:s') }}</td>
+                </tr>
+                {% if user.email %}
+                    <tr>
+                        <th>{{ 'Email'|trans }}</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>{{ 'Role'|trans }}</th>
+                    <td>{{ user_role(user.role.name) }}</td>
+                </tr>
+                <tr>
+                    <th>{{ 'Status'|trans }}</th>
+                    <td>{{ user_status(user.status) }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

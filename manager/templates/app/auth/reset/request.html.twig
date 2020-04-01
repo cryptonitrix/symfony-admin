@@ -1,0 +1,29 @@
+{% extends 'auth.html.twig' %}
+
+{% block title %}{{ 'Password Reset'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mx-4">
+                    <div class="card-body p-4">
+                        {% include '_flashes.html.twig' %}
+                        <h2>{{ 'Password Reset'|trans }}</h2>
+                        <p class="text-muted">{{ 'Enter your email address and click the button - an email will be sent to you with a link to reset your password.'|trans }}</p>
+                        {{ form_start(form) }}
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend"><span class="input-group-text">
+                        <i class="fas fa-envelope"></i></span></div>
+                            {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                        <button type="submit" class="btn btn-block btn-primary">{{ 'Change Password'|trans }}</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

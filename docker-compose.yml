@@ -1,0 +1,75 @@
+version: '3'
+services:
+    manager-nginx:
+        build:
+            context: ./manager/docker/development
+            dockerfile: nginx.docker
+        volumes:
+            - ./manager:/app
+        depends_on:
+            - manager-php-fpm
+        ports:
+            - "8080:80"
+    manager-php-fpm:
+        build:
+            context: ./manager/docker/development
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./manager:/app
+        depends_on:
+            - manager-postgres
+            - mailer
+            - manager-redis
+    manager-php-cli:
+        build:
+            context: ./manager/docker/development
+            dockerfile: php-cli.docker
+        volumes:
+            - ./manager:/app
+            - composer:/root/.composer/cache
+        depends_on:
+            - manager-postgres
+            - mailer
+            - manager-redis
+    manager-postgres:
+        image: postgres:11.2-alpine
+        volumes:
+            - manager-postgres:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: app
+        ports:
+            - "54321:5432"
+    manager-node-watch:
+        image: node:13.8-alpine
+        volumes:
+            - ./manager:/app
+        working_dir: /app
+        command: sh -c "until [ -f .ready ] ; do sleep 1 ; done && npm run watch"
+    manager-node:
+        image: node:13.8-alpine
+        volumes:
+            - ./manager:/app
+        working_dir: /app
+    mailer:
+        image: mailhog/mailhog
+        ports:
+            - "8081:8025"
+    manager-redis:
+        image: redis:5.0-alpine
+        volumes:
+            - manager-redis:/data
+        command: redis-server --requirepass secret
+    manager-wait-for-it:
+        image: alpine
+        build:
+            context: ./manager/docker/development
+            dockerfile: wait-for-it.docker
+        volumes:
+            - ./manager/docker/development/scripts/wait-for-it.sh:/usr/local/bin/wait-for-it.sh
+        stop_signal: SIGINT
+volumes:
+    manager-postgres:
+    manager-redis:
+    composer:
